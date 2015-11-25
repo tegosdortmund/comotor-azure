@@ -44,7 +44,7 @@ Param(
 )
 
 #define variables
-$githubURL = 'https://raw.githubusercontent.com/soerenstrassmann/comotor-deploy/master/'
+$githubURL = 'https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/'
 $filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'configure-nav-users.ps1', 'TFS.ps1')
 
 #create log folder

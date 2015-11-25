@@ -165,8 +165,6 @@
     "networkSecurityGroupName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sec')]",
 
     "accountid": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-
-    "ScriptFilePath": "https://raw.githubusercontent.com/soerenstrassmann/comotor-deploy/master/"
   },
 
   "resources": [
@@ -431,7 +429,7 @@
         "typeHandlerVersion": "1.4",
         "settings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/soerenstrassmann/comotor-deploy/master/start.ps1"
+            "https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/start.ps1"
           ],
           "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SSMS'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('TFS'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword') )]"
         },
