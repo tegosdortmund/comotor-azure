@@ -16,6 +16,22 @@ Param(
   [string]$tfsUserPassword
 )
 
+#write received parameters to log file
+[Environment]::NewLine
+Write-Output 'Received Parameters:'
+$outputString = 'Current user doing operations = ' + [Environment]::UserName
+Write-Output $outputString
+$outputString = 'navVersion = ' + $navVersion 
+Write-Output $outputString
+$outputString = 'country = ' + $country
+Write-Output $outputString
+$outputString = 'customerName = ' + $customerName
+Write-Output $outputString
+$outputString = 'tfsUserName = ' + $tfsUserName
+Write-Output $outputString
+$outputString = 'tfsUserPassword = ' + $tfsUserPassword
+Write-Output $outputString
+
 #set execution policy
 Set-ExecutionPolicy -ExecutionPolicy unrestricted -Force
 
@@ -71,7 +87,7 @@ Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 
 #provide connection information
 $tfsCollectionURL = 'https://tfs.tegos.eu/tfs/comotor'
-$localFolder = 'C:\comotorfiles\tfsworkspace'
+$localFolder = 'C:\comotorfiles\tfsworkspace\RapidStart'
 $tfsFolder = '$/comotor/MAIN/RapidStart'
 $tfsDomain = 'CBCDTM'
 if( $tfsUserName.Contains('CBCDTM') ) {
