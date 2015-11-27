@@ -119,6 +119,8 @@ $workspace.Get()
 #create new company
 $userName = [Environment]::UserName
 New-NAVCompany -ServerInstance 'NAV' -CompanyName $customerName -Force
+
+New-NAVServerUser -WindowsAccount $userName -ServerInstance NAV -Verbose 
 New-NAVServerUserPermissionSet -ServerInstance NAV -UserName $userName.ToUpper() -CompanyName $customerName -PermissionSetId SUPER -Verbose
 
 #auto create company
