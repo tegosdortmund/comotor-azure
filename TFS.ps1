@@ -124,5 +124,5 @@ New-NAVServerUser -WindowsAccount $userName -ServerInstance NAV -Verbose
 New-NAVServerUserPermissionSet -ServerInstance NAV -UserName $userName.ToUpper() -CompanyName $customerName -PermissionSetId SUPER -Verbose
 
 #auto create company
-Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language
+Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language 
 
