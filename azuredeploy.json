@@ -148,7 +148,8 @@
     "vmStorageAccountContainerName": "vhds",
 
     "vmName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'vm')]",
-    "location": "[resourceGroup().location]",
+    "location":  "West Europe",   
+    "locationDynamic": "[resourceGroup().location]",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
 
