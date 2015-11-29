@@ -95,7 +95,7 @@ $country = $country.Substring(0,2)
 $machineName = [Environment]::MachineName.ToLowerInvariant()
 
 #define vm admin user
-$compVmAdminUsername = $env:COMPUTERNAME + '\' + $vmAdminUsername
+$compVmAdminUsername = $vmAdminUsername
 $secVmAdminPassword = ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
 $credVmAdmin = New-Object System.Management.Automation.PSCredential($vmAdminUsername, $secVmAdminPassword)
 
