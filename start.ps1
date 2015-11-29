@@ -97,7 +97,7 @@ $machineName = [Environment]::MachineName.ToLowerInvariant()
 #define vm admin user
 $compVmAdminUsername = $env:COMPUTERNAME + '\' + $vmAdminUsername
 $secVmAdminPassword = ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
-$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
+$credVmAdmin = New-Object System.Management.Automation.PSCredential($vmAdminUsername, $secVmAdminPassword)
 
 #download script files
 [Environment]::NewLine
