@@ -118,15 +118,15 @@ $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + '
 #invoke scripts as separate processes
 $failure = $false
 try {
-    Start-Process powershell.exe $psCommandInstallPrequesites -Wait -Credential $credVmAdmin -Verb RunAs -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' -PassThru
-    Start-Process powershell.exe $psCommandDownloadFiles -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
-    Start-Process powershell.exe $psCommandInitializeComotor -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
+    Start-Process powershell.exe $psCommandInstallPrequesites -Credential $credVmAdmin -Wait -Credential $credVmAdmin -Verb RunAs -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' -PassThru
+    Start-Process powershell.exe $psCommandDownloadFiles -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
+    Start-Process powershell.exe $psCommandInitializeComotor -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
     
     #create company from TFS Rapid Start files
     if($TFS -eq 'Yes') {
-      Start-Process powershell.exe $psCommandTFS -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\5_TFS.log' -RedirectStandardError 'C:\comotorfiles\logs\5_TFS-error.txt'
+      Start-Process powershell.exe $psCommandTFS -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\5_TFS.log' -RedirectStandardError 'C:\comotorfiles\logs\5_TFS-error.txt'
     }
-    Start-Process powershell.exe $psCommandConfigureUser -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\6_configure-nav-users.log' -RedirectStandardError 'C:\comotorfiles\logs\6_configure-nav-users-error.txt'
+    Start-Process powershell.exe $psCommandConfigureUser -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\6_configure-nav-users.log' -RedirectStandardError 'C:\comotorfiles\logs\6_configure-nav-users-error.txt'
     
     #initialize vm
     ('$HardcodeLanguage = "'+$country.Substring(0,2)+'"')           | Add-Content "c:\DEMO\Initialize\HardcodeInput.ps1"
@@ -136,7 +136,7 @@ try {
     ('$HardcodeCloudServiceName = "'+$publicMachineName+'"')        | Add-Content "c:\DEMO\Initialize\HardcodeInput.ps1"
     ('$HardcodePublicMachineName = "'+$publicMachineName+'"')       | Add-Content "c:\DEMO\Initialize\HardcodeInput.ps1"
     ('$HardcodecertificatePfxFile = "default"')                     | Add-Content "c:\DEMO\Initialize\HardcodeInput.ps1"
-    Start-Process powershell.exe 'C:\DEMO\Initialize\install.ps1' -RedirectStandardOutput 'C:\comotorfiles\logs\7_initialize-vm.log' -RedirectStandardError 'C:\comotorfiles\logs\7_initialize-vm-error.txt' -Wait
+    Start-Process powershell.exe 'C:\DEMO\Initialize\install.ps1' -Credential $credVmAdmin -RedirectStandardOutput 'C:\comotorfiles\logs\7_initialize-vm.log' -RedirectStandardError 'C:\comotorfiles\logs\7_initialize-vm-error.txt' -Wait
     Set-Content -Path "c:\inetpub\wwwroot\http\$MachineName.rdp" -Value ('full address:s:' + $publicMachineName + ':3389')
    
     #change landing page
@@ -158,7 +158,7 @@ try {
     if ($clickOnce -eq "Yes") {
       [Environment]::NewLine
       Write-Output 'initializing clickOnce'
-      Start-Process powershell.exe 'c:\DEMO\Clickonce\install.ps1' -RedirectStandardOutput 'C:\comotorfiles\logs\8_clickonce-install.log' -RedirectStandardError 'C:\comotorfiles\logs\8_clickonce-install-error.txt' -Wait
+      Start-Process powershell.exe 'c:\DEMO\Clickonce\install.ps1' -Credential $credVmAdmin -RedirectStandardOutput 'C:\comotorfiles\logs\8_clickonce-install.log' -RedirectStandardError 'C:\comotorfiles\logs\8_clickonce-install-error.txt' -Wait
     }
 
 } catch {
