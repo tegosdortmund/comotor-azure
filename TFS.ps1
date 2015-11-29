@@ -117,11 +117,20 @@ $workspace.CreateMapping($workingFolder)
 $workspace.Get() 
 
 #create new company
-$userName = [Environment]::UserName
 New-NAVCompany -ServerInstance 'NAV' -CompanyName $customerName -Force
+$outputString = 'Creating new company ' + $customerName 
+Write-Output $outputString
 
+#create new user for codeunit operatio
+$userName = [Environment]::UserName
+$userName.ToUpper()
+$outputString = 'Creating new user ' + $userName 
+Write-Output $outputString
 New-NAVServerUser -WindowsAccount $userName -ServerInstance NAV -Verbose 
-New-NAVServerUserPermissionSet -ServerInstance NAV -UserName $userName.ToUpper() -CompanyName $customerName -PermissionSetId SUPER -Verbose
+
+$outputString = 'Set Permissions for new user ' + $userName 
+Write-Output $outputString
+New-NAVServerUserPermissionSet -ServerInstance NAV -UserName $userName -CompanyName $customerName -PermissionSetId SUPER -Verbose
 
 #auto create company
 Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language 
