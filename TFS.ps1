@@ -121,7 +121,7 @@ New-NAVCompany -ServerInstance 'NAV' -CompanyName $customerName -Force
 $outputString = 'Creating new company ' + $customerName 
 Write-Output $outputString
 
-#create new user for codeunit operatio
+#create new user for codeunit operation
 $userName = [Environment]::UserName
 $userName.ToUpper()
 $outputString = 'Creating new user ' + $userName 

@@ -1,6 +1,10 @@
 ﻿#set execution policy
 Set-ExecutionPolicy -ExecutionPolicy unrestricted -Force
 
+$userName = [Environment]::UserName
+$userName.ToUpper()
+Write-Output $userName
+
 #install prerequisites for azure powershell
 [Environment]::NewLine
 Write-Output 'Start installing .NET and PowerShellv2'

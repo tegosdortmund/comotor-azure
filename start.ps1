@@ -94,6 +94,11 @@ Write-Output $outputString
 $country = $country.Substring(0,2)
 $machineName = [Environment]::MachineName.ToLowerInvariant()
 
+#define vm admin user
+$compVmAdminUsername = $env:COMPUTERNAME + '\' + $vmAdminUsername
+$secVmAdminPassword = ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
+$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
+
 #download script files
 [Environment]::NewLine
 Write-Output 'Start downloading script files from github'
@@ -113,7 +118,7 @@ $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + '
 #invoke scripts as separate processes
 $failure = $false
 try {
-    Start-Process powershell.exe $psCommandInstallPrequesites -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt'
+    Start-Process powershell.exe -Credential $credVmAdmin -Verb RunAs -FilePath $psCommandInstallPrequesites -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' -PassThru
     Start-Process powershell.exe $psCommandDownloadFiles -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
     Start-Process powershell.exe $psCommandInitializeComotor -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
     
