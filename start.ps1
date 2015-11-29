@@ -118,7 +118,7 @@ $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + '
 #invoke scripts as separate processes
 $failure = $false
 try {
-    Start-Process powershell.exe $psCommandInstallPrequesites -Credential $credVmAdmin -Wait -Credential $credVmAdmin -Verb RunAs -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' -PassThru
+    Start-Process powershell.exe $psCommandInstallPrequesites -Credential $credVmAdmin -Wait -Verb RunAs -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' -PassThru
     Start-Process powershell.exe $psCommandDownloadFiles -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
     Start-Process powershell.exe $psCommandInitializeComotor -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
     
