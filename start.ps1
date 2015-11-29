@@ -1,46 +1,46 @@
 ﻿#parameters
 Param(
-  [Parameter(Mandatory=$True)]
-  [string]$azureStorageKey,
+    [Parameter(Mandatory=$True)]
+    [string]$azureStorageKey,
+        
+    [Parameter(Mandatory=$False)]
+    [string]$customerName,
 
-  [Parameter(Mandatory=$False)]
-  [string]$customerName,
+    [Parameter(Mandatory=$True)]
+    [string]$vmAdminUsername,
+    
+    [Parameter(Mandatory=$True)]
+    [string]$vmAdminPassword,
+    
+    [Parameter(Mandatory=$True)]
+    [string]$navVersion,
+    
+    [Parameter(Mandatory=$True)]
+    [string]$country,
+    
+    [Parameter(Mandatory=$False)]
+    [string]$SSMS = 'No',
 
-  [Parameter(Mandatory=$True)]
-  [string]$vmAdminUsername,
+    [Parameter(Mandatory=$False)]
+    [string]$TFS = 'No',
 
-  [Parameter(Mandatory=$True)]
-  [string]$vmAdminPassword,
+    [Parameter(Mandatory=$False)]
+    [string]$tfsUserName ,
+    
+    [Parameter(Mandatory=$False)]
+    [string]$tfsUserPassword,
 
-  [Parameter(Mandatory=$True)]
-  [string]$navVersion,
+    [Parameter(Mandatory=$False)]
+    [string]$clickOnce = 'No',
 
-  [Parameter(Mandatory=$True)]
-  [string]$country,
+    [Parameter(Mandatory=$False)]
+    [string]$navUser = $null,
 
-  [Parameter(Mandatory=$False)]
-  [string]$SSMS = 'No',
+    [Parameter(Mandatory=$False)]
+    [string]$navUserPassword = $null,
 
-  [Parameter(Mandatory=$False)]
-  [string]$TFS = 'No',
-
-  [Parameter(Mandatory=$False)]
-  [string]$tfsUserName ,
-
-  [Parameter(Mandatory=$False)]
-  [string]$tfsUserPassword,
-
-  [Parameter(Mandatory=$False)]
-  [string]$clickOnce = 'No',
-
-  [Parameter(Mandatory=$False)]
-  [string]$navUser = $null,
-
-  [Parameter(Mandatory=$False)]
-  [string]$navUserPassword = $null,
-
-  [Parameter(Mandatory=$True)]
-  [string]$publicMachineName
+    [Parameter(Mandatory=$True)]
+    [string]$publicMachineName
 )
 
 #define variables
@@ -103,9 +103,9 @@ $credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdmin
 [Environment]::NewLine
 Write-Output 'Start downloading script files from github'
 foreach ($file in $filesToDownloadArray) {
-  $source = $githubURL + $file
-  $destination = 'c:\comotorfiles\scripts\' + $file
-  Invoke-WebRequest $source -OutFile $destination -Verbose
+    $source = $githubURL + $file
+    $destination = 'c:\comotorfiles\scripts\' + $file
+    Invoke-WebRequest $source -OutFile $destination -Verbose
 }
 
 #generate commmand strings
@@ -118,7 +118,7 @@ $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + '
 #invoke scripts as separate processes
 $failure = $false
 try {
-    Start-Process powershell.exe $psCommandInstallPrequesites -Credential $credVmAdmin -Wait -Verb RunAs -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' -PassThru
+    Start-Process powershell.exe $psCommandInstallPrequesites -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' 
     Start-Process powershell.exe $psCommandDownloadFiles -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
     Start-Process powershell.exe $psCommandInitializeComotor -Credential $credVmAdmin -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
     
