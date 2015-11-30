@@ -94,14 +94,6 @@ Write-Output $outputString
 $country = $country.Substring(0,2)
 $machineName = [Environment]::MachineName.ToLowerInvariant()
 
-#define vm admin user
-$compVmAdminUsername = $env:COMPUTERNAME + '\' + $vmAdminUsername
-$secVmAdminPassword = ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
-$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
-$adminSession = New-PSSession -Credential $credential;          
-
-Invoke-Command -Session $adminSession -Script {
-
 #download script files
 [Environment]::NewLine
 Write-Output 'Start downloading script files from github'
@@ -109,8 +101,6 @@ foreach ($file in $filesToDownloadArray) {
     $source = $githubURL + $file
     $destination = 'c:\comotorfiles\scripts\' + $file
     Invoke-WebRequest $source -OutFile $destination -Verbose
-}
-
 }
 
 #generate commmand strings
