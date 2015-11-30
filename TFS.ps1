@@ -145,8 +145,11 @@ New-NAVServerUserPermissionSet -ServerInstance NAV -UserName 'NT AUTHORITY\SYSTE
 
 #auto create company
 Invoke-Command -ComputerName 'localhost' -Credential $credVmAdmin -ScriptBlock {
+    
     $navInternVersion = $args[0]
-    $language = $args[1]   
+    $language = $args[1]
+    $customerName = $args[2]
+      
     Write-Output $navInternVersion
     Write-Output $language
 
@@ -156,7 +159,7 @@ Invoke-Command -ComputerName 'localhost' -Credential $credVmAdmin -ScriptBlock {
     #import modules
     $navAdminToolPath = 'C:\Program Files\Microsoft Dynamics NAV\' + $navInternVersion + '\Service\NavAdminTool.ps1'
     Import-module $navAdminToolPath | Out-Null
-    Invoke-NAVCodeunit -ServerInstance NAV -CompanyName 'ctrmain' -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language
-} -Args $navInternVersion,$language
+    Invoke-NAVCodeunit -ServerInstance NAV -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language
+} -Args $navInternVersion,$language,$customerName
 
 

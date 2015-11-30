@@ -25,22 +25,22 @@ Param(
     [string]$TFS = 'No',
 
     [Parameter(Mandatory=$False)]
- [string]$tfsUserName ,
+    [string]$tfsUserName ,
 
-  [Parameter(Mandatory=$False)]
-  [string]$tfsUserPassword,
+    [Parameter(Mandatory=$False)]
+    [string]$tfsUserPassword,
 
-  [Parameter(Mandatory=$False)]
-  [string]$clickOnce = 'No',
+    [Parameter(Mandatory=$False)]
+    [string]$clickOnce = 'No',
 
-  [Parameter(Mandatory=$False)]
-  [string]$navUser = $null,
+    [Parameter(Mandatory=$False)]
+    [string]$navUser = $null,
 
-  [Parameter(Mandatory=$False)]
-  [string]$navUserPassword = $null,
+    [Parameter(Mandatory=$False)]
+    [string]$navUserPassword = $null,
 
-  [Parameter(Mandatory=$True)]
-  [string]$publicMachineName
+    [Parameter(Mandatory=$True)]
+    [string]$publicMachineName
 )
 
 #define variables
@@ -103,6 +103,14 @@ foreach ($file in $filesToDownloadArray) {
     Invoke-WebRequest $source -OutFile $destination -Verbose
 }
 
+#enable PowerShell remoting
+Enable-PSRemoting -Force
+
+#create vm admin user
+$compVmAdminUsername = $env:COMPUTERNAME + '\' + 'vmadmin'
+$secVmAdminPassword = ConvertTo-SecureString 'vmAdmin2015' -AsPlainText -Force
+$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
+
 #generate commmand strings
 $psCommandInstallPrequesites = 'c:\comotorfiles\scripts\install-prequesites.ps1'
 $psCommandDownloadFiles = 'c:\comotorfiles\scripts\download-files.ps1' + ' -navVersion ' + $navVersion + ' -country ' + $country + ' -SSMS ' + $SSMS + ' -TFS ' + $TFS + ' -azureStorageKey ' + $azureStorageKey
@@ -113,13 +121,13 @@ $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + '
 #invoke scripts as separate processes
 $failure = $false
 try {
-    Start-Process powershell.exe $psCommandInstallPrequesites -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' 
+    Start-Process powershell.exe $psCommandInstallPrequesites -Credential $credVmAdmin -Wait -PassThru -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' 
     Start-Process powershell.exe $psCommandDownloadFiles -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
     Start-Process powershell.exe $psCommandInitializeComotor -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
     
     #create company from TFS Rapid Start files
     if($TFS -eq 'Yes') {
-      Start-Process powershell.exe $psCommandTFS -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\5_TFS.log' -RedirectStandardError 'C:\comotorfiles\logs\5_TFS-error.txt'
+      Start-Process powershell.exe $psCommandTFS -Credential $credVmAdmin -Wait -PassThru -RedirectStandardOutput 'C:\comotorfiles\logs\5_TFS.log' -RedirectStandardError 'C:\comotorfiles\logs\5_TFS-error.txt'
     }
     Start-Process powershell.exe $psCommandConfigureUser -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\6_configure-nav-users.log' -RedirectStandardError 'C:\comotorfiles\logs\6_configure-nav-users-error.txt'
     
