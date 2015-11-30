@@ -117,39 +117,29 @@ $workspace.CreateMapping($workingFolder)
 $workspace.Get() 
 
 
-
-#define vm admin user
-$compVmAdminUsername = $env:COMPUTERNAME + '\' + 'vmadmin'
-$secVmAdminPassword = ConvertTo-SecureString 'vmAdmin2015' -AsPlainText -Force
-$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
-$adminSession = New-PSSession -Credential $credential;          
-
-
-
 #create new company
 New-NAVCompany -ServerInstance 'NAV' -CompanyName $customerName -Force
 $outputString = 'Creating new company ' + $customerName 
 Write-Output $outputString
 
-#create new suser for codeunit operation
+#create vm admin user
+$secVmAdminPassword = ConvertTo-SecureString 'vmAdmin2015' -AsPlainText -Force
+
+#create login for system user
 $userName = [Environment]::UserName
-$userName.ToUpper()
 $outputString = 'Creating new user ' + $userName 
 Write-Output $outputString
-New-NAVServerUser -WindowsAccount $userName -ServerInstance NAV -Verbose 
+New-NAVServerUser -ServerInstance NAV -UserName 'NT AUTHORITY\SYSTEM'.ToUpper() -Password $secVmAdminPassword -Verbose
+New-NAVServerUser -ServerInstance NAV -UserName 'SYSTEM'.ToUpper() -Password $secVmAdminPassword -Verbose
 
+#set permissions for system user
 $outputString = 'Set Permissions for new user ' + $userName 
 Write-Output $outputString
-New-NAVServerUserPermissionSet -ServerInstance NAV -UserName $userName -CompanyName $customerName -PermissionSetId SUPER -Verbose
+New-NAVServerUserPermissionSet -ServerInstance NAV -UserName 'SYSTEM' -CompanyName $customerName -PermissionSetId SUPER -Verbose
+New-NAVServerUserPermissionSet -ServerInstance NAV -UserName 'NT AUTHORITY\SYSTEM' -CompanyName $customerName -PermissionSetId SUPER -Verbose
 
+#auto create company
+Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language 
 
-Invoke-command –computername $env:COMPUTERNAME -credential $credVmAdmin –scriptblock {
-    Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language 
-}
-
-Invoke-Command -Session $adminSession -Script {   
-    #auto create company
-    Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language 
-}
 
 
