@@ -117,13 +117,18 @@ $workspace.CreateMapping($workingFolder)
 $workspace.Get() 
 
 
+#enable PowerShell remoting
+Enable-PSRemoting -Force
+
 #create new company
-New-NAVCompany -ServerInstance 'NAV' -CompanyName $customerName -Force
 $outputString = 'Creating new company ' + $customerName 
 Write-Output $outputString
+New-NAVCompany -ServerInstance 'NAV' -CompanyName $customerName -Force
 
 #create vm admin user
+$compVmAdminUsername = $env:COMPUTERNAME + '\' + 'vmadmin'
 $secVmAdminPassword = ConvertTo-SecureString 'vmAdmin2015' -AsPlainText -Force
+$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
 
 #create login for system user
 $userName = [Environment]::UserName
@@ -139,7 +144,19 @@ New-NAVServerUserPermissionSet -ServerInstance NAV -UserName 'SYSTEM' -CompanyNa
 New-NAVServerUserPermissionSet -ServerInstance NAV -UserName 'NT AUTHORITY\SYSTEM' -CompanyName $customerName -PermissionSetId SUPER -Verbose
 
 #auto create company
-Invoke-NAVCodeunit -ServerInstance 'NAV' -CompanyName $customerName -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language 
+Invoke-Command -ComputerName 'localhost' -Credential $credVmAdmin -ScriptBlock {
+    $navInternVersion = $args[0]
+    $language = $args[1]   
+    Write-Output $navInternVersion
+    Write-Output $language
 
+    $bla = [Environment]::UserName 
+    Write-Output $bla
+
+    #import modules
+    $navAdminToolPath = 'C:\Program Files\Microsoft Dynamics NAV\' + $navInternVersion + '\Service\NavAdminTool.ps1'
+    Import-module $navAdminToolPath | Out-Null
+    Invoke-NAVCodeunit -ServerInstance NAV -CompanyName 'ctrmain' -Codeunit 5222051 -MethodName "LoadPackageCollFile" -Argument 'C:\comotorfiles\tfsworkspace\RapidStart\W1 Stainless Steel Demo.xml' -Language $language
+} -Args $navInternVersion,$language
 
 
