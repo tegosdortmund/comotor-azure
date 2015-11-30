@@ -1,6 +1,6 @@
 ﻿
 
-New-AzureRmResourceGroupDeployment -Name comotor42 -ResourceGroupName comotor -TemplateUri 'https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/azuredeploy.json' -TemplateParameterFile 'C:\Users\sstrassmann\Desktop\Seminararbeit\other resources\azuredeploy.param.dev.json'
+New-AzureRmResourceGroupDeployment -Name comotorb -ResourceGroupName comotor -TemplateUri 'https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/azuredeploy.json' -TemplateParameterFile 'C:\Users\sstrassmann\Desktop\Seminararbeit\other resources\azuredeploy.param.dev.json'
 
 
 $secpasswd = ConvertTo-SecureString '' -AsPlainText -Force
@@ -11,7 +11,7 @@ Login-AzureRmAccount -Verbose -Credential $cred
 
 
 do {
-  $resources = Get-AzureRmResource -ResourceGroupName 'comotor' |  where { (!$_.Name.Contains('notdelete')) -and (!$_.Name.Contains('tegosDTM-SStrassmann')) -and (!$_.Name.Contains('grau')) }
+  $resources = Get-AzureRmResource -ResourceGroupName 'comotor' |  where { (!$_.Name.Contains('notdelete')) -and (!$_.Name.Contains('tegosDTM-SStrassmann')) -and (!$_.Name.Contains('nickel')) }
 
   foreach ($resource in $resources) {
     echo $resource.Name
