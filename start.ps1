@@ -98,10 +98,11 @@ $machineName = [Environment]::MachineName.ToLowerInvariant()
 $compVmAdminUsername = $env:COMPUTERNAME + '\' + $vmAdminUsername
 $secVmAdminPassword = ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
 $credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
+$adminSession = New-PSSession -Credential $credential;          
+
+Invoke-Command -Session $adminSession -Script {
 
 #download script files
-Push-ImpersonationContext $credVmAdmin
-
 [Environment]::NewLine
 Write-Output 'Start downloading script files from github'
 foreach ($file in $filesToDownloadArray) {
@@ -110,7 +111,7 @@ foreach ($file in $filesToDownloadArray) {
     Invoke-WebRequest $source -OutFile $destination -Verbose
 }
 
-Pop-ImpersonationContext
+}
 
 #generate commmand strings
 $psCommandInstallPrequesites = 'c:\comotorfiles\scripts\install-prequesites.ps1'
@@ -122,10 +123,7 @@ $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + '
 #invoke scripts as separate processes
 $failure = $false
 try {
-    Push-ImpersonationContext $credVmAdmin
     Start-Process powershell.exe $psCommandInstallPrequesites -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\2_install-prequesites.log' -RedirectStandardError 'C:\comotorfiles\logs\2_install-prequesites-error.txt' 
-    Pop-ImpersonationContext
-
     Start-Process powershell.exe $psCommandDownloadFiles -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\3_downloadfiles.log' -RedirectStandardError 'C:\comotorfiles\logs\3_downloadfiles-error.txt'
     Start-Process powershell.exe $psCommandInitializeComotor -Wait -RedirectStandardOutput 'C:\comotorfiles\logs\4_initialize-comotor.log' -RedirectStandardError 'C:\comotorfiles\logs\4_initialize-comotor-error.txt'
     
