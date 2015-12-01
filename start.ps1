@@ -3,7 +3,7 @@ Param(
     [Parameter(Mandatory=$True)]
     [string]$azureStorageKey,
         
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory=$True)]
     [string]$customerName,
 
     [Parameter(Mandatory=$True)]
@@ -12,11 +12,11 @@ Param(
     [Parameter(Mandatory=$True)]
     [string]$vmAdminPassword,
     
-    [Parameter(Mandatory=$True)]
-    [string]$navVersion,
+    [Parameter(Mandatory=$False)]
+    [string]$navVersion = '2016',
     
-    [Parameter(Mandatory=$True)]
-    [string]$country,
+    [Parameter(Mandatory=$False)]
+    [string]$country = 'W1-International',
     
     [Parameter(Mandatory=$False)]
     [string]$SSMS = 'No',
@@ -63,8 +63,6 @@ Set-ExecutionPolicy -ExecutionPolicy unrestricted -Force
 #write received parameters to log file
 [Environment]::NewLine
 Write-Output 'Received Parameters:'
-$outputString = 'azureStorageKey = ' + $azureStorageKey
-Write-Output $outputString
 $outputString = 'navVersion = ' + $navVersion 
 Write-Output $outputString
 $outputString = 'country = ' + $country
@@ -73,21 +71,15 @@ $outputString = 'SSMS = ' + $SSMS
 Write-Output $outputString
 $outputString = 'vmAdminUserName = ' + $vmAdminUsername
 Write-Output $outputString
-$outputString = 'vmAdminPassword = ' + $vmAdminPassword
-Write-Output $outputString
 $outputString = 'publicMachineName = ' + $publicMachineName
 Write-Output $outputString
 $outputString = 'navUser = ' + $navUser
-Write-Output $outputString
-$outputString = 'navUserPassword = ' + $navUserPassword
 Write-Output $outputString
 $outputString = 'clickOnce = ' + $clickOnce
 Write-Output $outputString
 $outputString = 'TFS = ' + $TFS
 Write-Output $outputString
 $outputString = 'tfsUserName = ' + $tfsUserName
-Write-Output $outputString
-$outputString = 'tfsUserPassword = ' + $tfsUserPassword
 Write-Output $outputString
 
 #define variables
@@ -103,19 +95,11 @@ foreach ($file in $filesToDownloadArray) {
     Invoke-WebRequest $source -OutFile $destination -Verbose
 }
 
-#enable PowerShell remoting
-Enable-PSRemoting -Force
-
-#create vm admin user
-$compVmAdminUsername = $env:COMPUTERNAME + '\' + 'vmadmin'
-$secVmAdminPassword = ConvertTo-SecureString 'vmAdmin2015' -AsPlainText -Force
-$credVmAdmin = New-Object System.Management.Automation.PSCredential($compVmAdminUsername, $secVmAdminPassword)
-
-#generate commmand strings
+#generate powershell commmand strings
 $psCommandInstallPrequesites = 'c:\comotorfiles\scripts\install-prequesites.ps1'
 $psCommandDownloadFiles = 'c:\comotorfiles\scripts\download-files.ps1' + ' -navVersion ' + $navVersion + ' -country ' + $country + ' -SSMS ' + $SSMS + ' -TFS ' + $TFS + ' -azureStorageKey ' + $azureStorageKey
 $psCommandInitializeComotor = 'c:\comotorfiles\scripts\initialize-comotor.ps1 ' + ' -navVersion ' + $navVersion + ' -country ' + $country + ' -SSMS ' + $SSMS + ' -vmAdminUsername ' + $vmAdminUsername + ' -vmAdminPassword ' + $vmAdminPassword
-$psCommandTFS = 'c:\comotorfiles\scripts\TFS.ps1' + ' -navVersion ' + $navVersion + ' -customerName \"' + $customerName + '\" -country ' + $country + ' -tfsUserName ' + $tfsUserName + ' -tfsUserPassword ' + $tfsUserPassword
+$psCommandTFS = 'c:\comotorfiles\scripts\TFS.ps1' + ' -navVersion ' + $navVersion + ' -customerName \"' + $customerName + '\" -country ' + $country + ' -tfsUserName ' + $tfsUserName + ' -tfsUserPassword ' + $tfsUserPassword + ' -vmAdminUsername ' + $vmAdminUsername + ' -vmAdminPassword ' + $vmAdminPassword
 $psCommandConfigureUser = 'c:\comotorfiles\scripts\configure-nav-users.ps1 ' + ' -navUser ' + $navUser + ' -navUserPassword ' + $navUserPassword + ' -navVersion ' + $navVersion + ' -country ' + $country + ' -customerName \"' + $customerName + '\" -TFS ' + $TFS 
 
 #invoke scripts as separate processes
@@ -152,16 +136,12 @@ try {
     [Environment]::NewLine
     Write-Output 'Copying landing page files to IIS http directory'
     Copy-Item 'C:\comotorfiles\landingpage\*' 'C:\inetpub\wwwroot\http' -Force -Verbose
-    
-    #change colors (web client, phone client)
-    $cssContent = (Get-Content -Path 'C:\inetpub\wwwroot\NAV\WebClient\Resources\tablet.css' -ReadCount 0) -join "`n"
-    $cssContent -replace 'rgba(153,153,153,0)', 'rgba(152,191,12,1)' | Set-Content -Path 'C:\inetpub\wwwroot\NAV\WebClient\Resources\tablet.css'
-
+ 
     #enable click once 
     if ($clickOnce -eq "Yes") {
-      [Environment]::NewLine
-      Write-Output 'initializing clickOnce'
-      Start-Process powershell.exe 'c:\DEMO\Clickonce\install.ps1' -RedirectStandardOutput 'C:\comotorfiles\logs\8_clickonce-install.log' -RedirectStandardError 'C:\comotorfiles\logs\8_clickonce-install-error.txt' -Wait
+        [Environment]::NewLine
+        Write-Output 'initializing clickOnce'
+        Start-Process powershell.exe 'c:\DEMO\Clickonce\install.ps1' -RedirectStandardOutput 'C:\comotorfiles\logs\8_clickonce-install.log' -RedirectStandardError 'C:\comotorfiles\logs\8_clickonce-install-error.txt' -Wait
     }
 
 } catch {

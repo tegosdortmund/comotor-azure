@@ -20,7 +20,7 @@
         "RK",
         "SB",
         "ST",
-        "YELO"
+        "YO"
       ],
       "metadata": {
         "description": "Select a inquirer name"
@@ -29,6 +29,7 @@
     "customerName": {
       "type": "string",
       "defaultValue": "ctrmain",
+      "maxLength": 10,
       "metadata": {
         "description": "Select a name for your solution"
       }
@@ -143,7 +144,7 @@
     "lowerCaseEmployeeCode": "[toLower(parameters('employeeCode'))]",
     "lowerCaseCustomerName": "[toLower(replace(parameters('customerName'), ' ', ''))]",
 
-    "storageAccountName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'storage')]",
+    "storageAccountName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sto')]",
     "vmStorageAccountType": "Standard_LRS",
     "vmStorageAccountContainerName": "vhds",
 
@@ -155,12 +156,12 @@
 
     "nicName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'nic')]",
     "addressPrefix": "10.0.0.0/16",
-    "subnetName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'subnet')]",
+    "subnetName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sub')]",
     "subnetPrefix": "10.0.0.0/24",
 
     "domainName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'dns')]",
     "publicIPAddressType": "Dynamic",
-    "virtualNetworkName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'vnet')]",
+    "virtualNetworkName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'vnt')]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "networkSecurityGroupName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sec')]",
