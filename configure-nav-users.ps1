@@ -114,7 +114,7 @@ if(![string]::IsNullOrEmpty($navUser)) {
         }
 
         for ($a=0; $a -lt $navUser.length; $a++) {
-            $unsecureString = $navUser[a] + '123'
+            $unsecureString = $navUser[$a] + '123'
             $secureString = convertto-securestring $unsecureString -asplaintext -Force
             $fullname = $navUser[$a]
             New-NAVServerUser -ServerInstance NAV -UserName $navUser[$a].ToUpper() -FullName $fullname -Password $secureString -Verbose

@@ -62,7 +62,7 @@ Set-ExecutionPolicy -ExecutionPolicy unrestricted -Force
 
 #write received parameters to log file
 [Environment]::NewLine
-Write-Output 'Received Parameters:'
+Write-Output '##### Received Parameters: #####'
 $outputString = 'navVersion = ' + $navVersion 
 Write-Output $outputString
 $outputString = 'country = ' + $country
@@ -88,7 +88,7 @@ $machineName = [Environment]::MachineName.ToLowerInvariant()
 
 #download script files
 [Environment]::NewLine
-Write-Output 'Start downloading script files from github'
+Write-Output '##### Start downloading script files from github #####'
 foreach ($file in $filesToDownloadArray) {
     $source = $githubURL + $file
     $destination = 'c:\comotorfiles\scripts\' + $file
@@ -134,7 +134,7 @@ try {
         
     #copy custom landing page files
     [Environment]::NewLine
-    Write-Output 'Copying landing page files to IIS http directory'
+    Write-Output '##### Copying landing page files to IIS http directory #####'
     Copy-Item 'C:\comotorfiles\landingpage\*' 'C:\inetpub\wwwroot\http' -Force -Verbose
  
     #enable click once 

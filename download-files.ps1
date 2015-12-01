@@ -30,7 +30,7 @@ $ctx = New-AzureStorageContext -StorageAccountName notdelete -StorageAccountKey 
 
 #download files
 [Environment]::NewLine
-Write-Output '##### Start downloading files #####'
+Write-Output '##### Start downloading setup files #####'
 Get-AzureStorageBlobContent -blob PS_SQL_2012_Extensions.msi -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose
 Get-AzureStorageBlobContent -blob $databaseAzurePath -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose
 if ($TFS -eq "Yes") {

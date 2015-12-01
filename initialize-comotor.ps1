@@ -21,7 +21,7 @@ Set-ExecutionPolicy -ExecutionPolicy unrestricted -Force
 
 #defince variables
 $sqlServerName = $env:computername +'\NAVDEMO'
-$sqlUserName = $env:computername +'\' + $vmAdminUsername
+$sqlUserName = $env:computername +'\' + $vmAdminUsername.ToUpper()
 $country = $country.Substring(0,2)
 $bakFilePath = 'C:\comotorfiles\downloads\Release_CTR_MAIN_' + $navVersion + '-' + $country+'.bak'
 $databaseName = 'Release_CTR_MAIN_' + $navVersion + '-' + $country
@@ -97,7 +97,8 @@ Set-NAVServerConfiguration NAV -KeyName DatabaseName -KeyValue $databaseName -Ve
 
 # create login for network service 
 [Environment]::NewLine
-Write-Output '##### Creating database login for VM admin user and Network Service #####'
+$outputString = '##### Creating database login for ' + $sqlUserName + ' and NT AUTHORITY\NETWORK SERVICE #####'
+Write-Output $outputString
 [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null 
 $sqlServer = New-Object ('Microsoft.SqlServer.Management.Smo.Server') $sqlServerName -Verbose
 $database = $sqlServer.Databases[$databaseName]
@@ -116,7 +117,8 @@ while ((Get-NAVServerInstance -ServerInstance NAV).State -ne "Running") { Start-
 
 #create NAV login for VM admin
 [Environment]::NewLine
-Write-Output '##### Creating NAV login for VM admin and Network Service #####'
+$outputString = '##### Creating NAV login for ' + $sqlUserName + ' #####'
+Write-Output $outputString
 $secureString = convertto-securestring $vmAdminPassword -asplaintext -Force
 New-NAVServerUser -WindowsAccount $sqlUserName -ServerInstance NAV -Verbose 
 New-NAVServerUserPermissionSet -WindowsAccount $sqlUserName -ServerInstance NAV -PermissionSetId SUPER -Verbose 

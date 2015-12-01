@@ -10,11 +10,11 @@ Add-WindowsFeature Powershell-V2
 
 #install azure powershell modules
 [Environment]::NewLine
-Write-Output '##### Start downloading azure setup file #####'
+Write-Output '##### Start downloading Azure Powershell setup file #####'
 Invoke-WebRequest https://tegosstorage.blob.core.windows.net/public/azure-powershell.0.9.9.msi -OutFile c:\comotorfiles\downloads\azure-powershell.0.9.9.msi -Verbose
 [Environment]::NewLine
 Write-Output '#####Using local file to install Azure PowerShell #####'
-Start-Process C:\comotorfiles\downloads\azure-powershell.0.9.9.msi /quiet -Wait -Verbose -PassThru
+Start-Process C:\comotorfiles\downloads\azure-powershell.0.9.9.msi /quiet -Wait -PassThru
 
 #use WebPI to install SQL Server 2013 CLR Types and Shared Management Objects
 [Environment]::NewLine
