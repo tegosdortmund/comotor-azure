@@ -26,10 +26,17 @@
         "description": "Select a inquirer name"
       }
     },
+    "customerIdentifier": {
+      "type": "string",
+      "defaultValue": "nickel",
+      "maxLength": 10,
+      "metadata": {
+        "description": "Select a name for your solution"
+      }
+    },
     "customerName": {
       "type": "string",
-      "defaultValue": "ctrmain",
-      "maxLength": 10,
+      "defaultValue": "Nickel GmbH",
       "metadata": {
         "description": "Select a name for your solution"
       }
@@ -143,28 +150,29 @@
   "variables": {
     "lowerCaseEmployeeCode": "[toLower(parameters('employeeCode'))]",
     "lowerCaseCustomerName": "[toLower(replace(parameters('customerName'), ' ', ''))]",
+    "lowerCaseCustomerIdentifier": "[toLower(replace(parameters('customerIdentifier'), ' ', ''))]",
 
-    "storageAccountName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sto')]",
+    "storageAccountName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'sto')]",
     "vmStorageAccountType": "Standard_LRS",
     "vmStorageAccountContainerName": "vhds",
 
-    "vmName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'vm')]",
+    "vmName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'vm')]",
     "location":  "West Europe",   
     "locationDynamic": "[resourceGroup().location]",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
 
-    "nicName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'nic')]",
+    "nicName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'nic')]",
     "addressPrefix": "10.0.0.0/16",
-    "subnetName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sub')]",
+    "subnetName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'sub')]",
     "subnetPrefix": "10.0.0.0/24",
 
-    "domainName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'dns')]",
+    "domainName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'dns')]",
     "publicIPAddressType": "Dynamic",
-    "virtualNetworkName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'vnt')]",
+    "virtualNetworkName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'vnt')]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-    "networkSecurityGroupName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerName'), 'sec')]",
+    "networkSecurityGroupName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'sec')]",
 
     "accountid": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
   },
