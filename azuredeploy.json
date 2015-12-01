@@ -29,7 +29,7 @@
     "customerIdentifier": {
       "type": "string",
       "defaultValue": "nickel",
-      "maxLength": 10,
+      "maxLength": 8,
       "metadata": {
         "description": "Select a name for your solution"
       }
@@ -152,7 +152,7 @@
     "lowerCaseCustomerName": "[toLower(replace(parameters('customerName'), ' ', ''))]",
     "lowerCaseCustomerIdentifier": "[toLower(replace(parameters('customerIdentifier'), ' ', ''))]",
 
-    "storageAccountName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'sto')]",
+    "storageAccountName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'storage')]",
     "vmStorageAccountType": "Standard_LRS",
     "vmStorageAccountContainerName": "vhds",
 
@@ -164,12 +164,12 @@
 
     "nicName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'nic')]",
     "addressPrefix": "10.0.0.0/16",
-    "subnetName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'sub')]",
+    "subnetName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'subnet')]",
     "subnetPrefix": "10.0.0.0/24",
 
     "domainName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'dns')]",
     "publicIPAddressType": "Dynamic",
-    "virtualNetworkName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'vnt')]",
+    "virtualNetworkName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'vnet')]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "networkSecurityGroupName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'sec')]",
