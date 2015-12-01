@@ -103,6 +103,14 @@
         "Description": "Select if SSMS should be available"
       }
     },
+    "clickOnce": {
+      "type": "string",
+      "defaultValue": "No",
+      "allowedValues": [ "Yes", "No" ],
+      "metadata": {
+        "Description": "Select if ClickOnce should be available"
+      }
+    },
     "TFS": {
       "type": "string",
       "defaultValue": "No",
@@ -121,14 +129,6 @@
       "type": "securestring",
       "metadata": {
         "description": "Provide a TFS password"
-      }
-    },
-    "clickOnce": {
-      "type": "string",
-      "defaultValue": "No",
-      "allowedValues": [ "Yes", "No" ],
-      "metadata": {
-        "Description": "Select if ClickOnce should be available"
       }
     },
     "navUser": {
