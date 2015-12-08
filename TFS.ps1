@@ -55,7 +55,9 @@ Import-module $navAdminToolPath | Out-Null
 [Environment]::NewLine
 $outputString = '##### Creating TFS credentials #####'
 $secTFSPassword = ConvertTo-SecureString $tfsUserPassword -AsPlainText -Force
+Start-Sleep -Seconds 2
 $credTFS = New-Object System.Management.Automation.PSCredential($tfsUserName, $secTFSPassword)
+Write-Output $credTFS
 
 #define TFS URL and files
 [Environment]::NewLine

@@ -53,6 +53,7 @@ New-Item -ItemType Directory -Path C:\comotorfiles\scripts -Force
 New-Item -ItemType Directory -Path C:\comotorfiles\logs -Force
 New-Item -ItemType Directory -Path C:\comotorfiles\downloads -Force
 New-Item -ItemType Directory -Path C:\comotorfiles\landingpage -Force
+New-Item -ItemType Directory -Path C:\comotorfiles\tfsworkspace\RapidStart -Force
 
 #start logging
 Start-Transcript -Path c:\comotorfiles\logs\1_start.log

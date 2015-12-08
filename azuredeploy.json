@@ -20,7 +20,7 @@
         "RK",
         "SB",
         "ST",
-        "YO"
+        "YELO"
       ],
       "metadata": {
         "description": "Select a inquirer name"
@@ -29,7 +29,7 @@
     "customerIdentifier": {
       "type": "string",
       "defaultValue": "nickel",
-      "maxLength": 8,
+      "maxLength": 7,
       "metadata": {
         "description": "Select a name for your solution"
       }
@@ -93,7 +93,7 @@
         "Description": "Select Microsoft Dynamics NAV country version"
       }
     },
-    "SSMS": {
+    "SQLServerManagementStudio": {
       "type": "string",
       "defaultValue": "No",
       "allowedValues": [ "Yes", "No" ],
@@ -439,7 +439,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/start.ps1"
           ],
-          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SSMS'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword') )]"
+          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SQLServerManagementStudio'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword') )]"
         },
         "protectedSettings": {
           "storageAccountName": "[variables('storageAccountName')]",
