@@ -95,6 +95,28 @@ foreach ($file in $filesToDownloadArray) {
     Invoke-WebRequest $source -OutFile $destination -Verbose
 }
 
+<#
+#create TFS credentials
+[Environment]::NewLine
+$outputString = '##### Creating TFS credentials #####'
+$secTFSPassword = ConvertTo-SecureString $tfsUserPassword -AsPlainText -Force
+$credTFS = New-Object System.Management.Automation.PSCredential($tfsUserName, $secTFSPassword)
+
+#define TFS URL and files
+[Environment]::NewLine
+$outputString = '##### Defining TFS URL and Files #####'
+$tfsURL = 'https://tfs.tegos.eu/tfs/comotor/comotor/_api/_versioncontrol/itemContent?path=%24%2Fcomotor%2FMAIN%2FRapidStart%2F'
+$filesToDownloadArray = ('PackageW1-BASE.xml', 'PackageW1-COMOTOR.xml', 'PackageW1-FINANCE.xml', 'PackageW1-STAINLESS S. - EX.xml', 'PackageW1-STAINLESS S. DEMO.xml', 'PackageW1-STAINLESS STEEL.xml', 'W1 Finance Demo.xml', 'W1 Stainless Steel Demo - Extended Market Prices.xml', 'W1 Stainless Steel Demo.xml')
+
+Write-Output '##### Start downloading RapidStart-Packages from TFS #####'
+foreach ($file in $filesToDownloadArray) {
+    $source = $tfsURL + $file
+    $destination = 'C:\comotorfiles\scripts\' + $file
+    Invoke-WebRequest $source -OutFile $destination -Credential $credTFS -Verbose
+}
+#>
+
+
 #generate powershell commmand strings
 $psCommandInstallPrequesites = 'c:\comotorfiles\scripts\install-prequesites.ps1'
 $psCommandDownloadFiles = 'c:\comotorfiles\scripts\download-files.ps1' + ' -navVersion ' + $navVersion + ' -country ' + $country + ' -SSMS ' + $SSMS + ' -TFS ' + $TFS + ' -azureStorageKey ' + $azureStorageKey

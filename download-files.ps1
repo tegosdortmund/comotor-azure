@@ -33,10 +33,6 @@ $ctx = New-AzureStorageContext -StorageAccountName notdelete -StorageAccountKey 
 Write-Output '##### Start downloading setup files #####'
 Get-AzureStorageBlobContent -blob PS_SQL_2012_Extensions.msi -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose
 Get-AzureStorageBlobContent -blob $databaseAzurePath -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose
-if ($TFS -eq "Yes") {
-    Get-AzureStorageBlobContent -blob VS_TFS_2013_Team_Explorer.iso -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose
-    Get-AzureStorageBlobContent -blob VS_TFS_2013_Power_Tools.msi -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose
-}
 if ($SSMS -eq "Yes") {
     Get-AzureStorageBlobContent -blob SSMS_2014_Express.iso -Container comotor -Destination C:\comotorfiles\downloads -Context $ctx -Force -Verbose 
 }

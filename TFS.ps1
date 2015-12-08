@@ -51,73 +51,24 @@ Write-Output '##### Importing Modules #####'
 $navAdminToolPath = 'C:\Program Files\Microsoft Dynamics NAV\' + $navInternVersion + '\Service\NavAdminTool.ps1'
 Import-module $navAdminToolPath | Out-Null
 
-#mount TFS image
+#create TFS credentials
 [Environment]::NewLine
-Write-Output '##### Using local image file to install TFS Team Explorer #####'
-$tfsMountResult = Mount-DiskImage -ImagePath C:\comotorfiles\downloads\VS_TFS_2013_Team_Explorer.iso -StorageType ISO 
-$tfsDriveLetter = (Get-DiskImage -ImagePath C:\comotorfiles\downloads\VS_TFS_2013_Team_Explorer.iso | Get-Volume).DriveLetter
-$tfsSetupURL = $tfsDriveLetter + ':\vs_teamExplorer.exe'
-$tfsInstallParameters = “/QUIET"
-Start-Process -FilePath $tfsSetupURL -ArgumentList $tfsInstallParameters -Wait -Passthru
+$outputString = '##### Creating TFS credentials #####'
+$secTFSPassword = ConvertTo-SecureString $tfsUserPassword -AsPlainText -Force
+$credTFS = New-Object System.Management.Automation.PSCredential($tfsUserName, $secTFSPassword)
+
+#define TFS URL and files
 [Environment]::NewLine
-Write-Output '##### TFS installation successful #####'
+$outputString = '##### Defining TFS URL and Files #####'
+$tfsURL = 'https://tfs.tegos.eu/tfs/comotor/comotor/_api/_versioncontrol/itemContent?path=%24%2Fcomotor%2FMAIN%2FRapidStart%2F'
+$filesToDownloadArray = ('PackageW1-BASE.xml', 'PackageW1-COMOTOR.xml', 'PackageW1-FINANCE.xml', 'PackageW1-STAINLESS S. - EX.xml', 'PackageW1-STAINLESS S. DEMO.xml', 'PackageW1-STAINLESS STEEL.xml', 'W1 Finance Demo.xml', 'W1 Stainless Steel Demo - Extended Market Prices.xml', 'W1 Stainless Steel Demo.xml')
 
-#install TFS Power Tools
-[Environment]::NewLine
-Write-Output '##### Using local file to install TFS Power Tools #####'
-$msiParameters = '/i C:\comotorfiles\downloads\VS_TFS_2013_Power_Tools.msi /q AddLocal="ALL"'
-Start-Process -FilePath msiexec -ArgumentList $msiParameters -Wait -Passthru 
-
-#add TFS snapin
-Add-PSSnapin Microsoft.TeamFoundation.PowerShell
-
-#load assemblies
-[Environment]::NewLine
-Write-Output '##### Load assemblies #####'
-[void][System.Reflection.Assembly]::LoadWithPartialName("Microsoft.TeamFoundation.Client")
-[void][System.Reflection.Assembly]::LoadWithPartialName("Microsoft.TeamFoundation.VersionControl.Client")
-
-#provide connection information
-$tfsCollectionURL = 'https://tfs.tegos.eu/tfs/comotor'
-$localFolder = 'C:\comotorfiles\tfsworkspace\RapidStart'
-$tfsFolder = '$/comotor/MAIN/RapidStart'
-$tfsDomain = 'CBCDTM'
-if( $tfsUserName.ToUpper().Contains('\') ) {
-    $tfsUserNameArray = $tfsUserName.Split('\')
-    $tfsUserName = $tfsUserNameArray[1]
-} elseif ( $tfsUserName.ToUpper().Contains('/') ) {
-    $tfsUserNameArray = $tfsUserName.Split('/')
-    $tfsUserName = $tfsUserNameArray[1]
+Write-Output '##### Start downloading RapidStart-Packages from TFS #####'
+foreach ($file in $filesToDownloadArray) {
+    $source = $tfsURL + $file
+    $destination = 'C:\comotorfiles\tfsworkspace\RapidStart\' + $file
+    Invoke-WebRequest $source -OutFile $destination -Credential $credTFS -Verbose
 }
-$tfsCredentials = New-Object System.Net.NetworkCredential($tfsUserName, $tfsUserPassword, $tfsDomain)
-
-#declare sever objects
-[Environment]::NewLine
-Write-Output '##### Connectiong to TFS #####'
-$tfsProjectCollection = New-Object Microsoft.TeamFoundation.Client.TfsTeamProjectCollection($tfsCollectionUrl, $tfsCredentials)
-$tfsProjectCollection.Authenticate()
-$tfsVersionControlType = [Microsoft.TeamFoundation.VersionControl.Client.VersionControlServer]
-$tfsVersionControlServer = $tfsProjectCollection.GetService($tfsVersionControlType)
-[Environment]::NewLine
-Write-Output '##### TFS connections established #####'
-
-#create workspace if not existing
-[Environment]::NewLine
-Write-Output '##### Creating/mapping TFS workspace #####'
-$workspaceName = "tfsworkspace" -f [System.Guid]::NewGuid().ToString()
-if($tfsVersionControlServer.GetWorkspace($workspaceName, $tfsUserName) -ne $null) {
-    $outputString = 'Deleting existing workspace "' + $tfsVersionControlServer.GetWorkspace($workspaceName, $tfsUserName).Name + '"'
-    Write-Output $outputString  
-    $tfsVersionControlServer.DeleteWorkspace($workspaceName, $tfsUserName)
-}
-$workspace = $tfsVersionControlServer.CreateWorkspace($workspaceName, $tfsVersionControlServer.AuthenticatedUser)
-$workingfolder = New-Object Microsoft.TeamFoundation.VersionControl.Client.WorkingFolder($tfsFolder, $localFolder)
-$workspace.CreateMapping($workingFolder)
-
-#get objects
-[Environment]::NewLine
-Write-Output '##### Get objects from TFS #####'
-$workspace.Get() 
 
 #create new company
 [Environment]::NewLine

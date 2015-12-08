@@ -109,12 +109,12 @@
         "Description": "Select if ClickOnce should be available"
       }
     },
-    "TFS": {
+    "rapidStart": {
       "type": "string",
       "defaultValue": "No",
       "allowedValues": [ "Yes", "No" ],
       "metadata": {
-        "Description": "Select if TFS support should be available"
+        "Description": "Select if Auto Create Company should be executed"
       }
     },
     "tfsUserName": {
@@ -439,7 +439,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/start.ps1"
           ],
-          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SSMS'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('TFS'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword') )]"
+          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SSMS'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword') )]"
         },
         "protectedSettings": {
           "storageAccountName": "[variables('storageAccountName')]",
