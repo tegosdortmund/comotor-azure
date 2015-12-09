@@ -24,10 +24,10 @@ Param(
     [Parameter(Mandatory=$False)]
     [string]$TFS = 'No',
 
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory=$True)]
     [string]$tfsUserName ,
 
-    [Parameter(Mandatory=$False)]
+    [Parameter(Mandatory=$True)]
     [string]$tfsUserPassword,
 
     [Parameter(Mandatory=$False)]
@@ -52,7 +52,7 @@ New-Item -ItemType Directory -Path C:\comotorfiles\landingpage -Force
 New-Item -ItemType Directory -Path C:\comotorfiles\tfsworkspace\RapidStart -Force
 
 #start logging
-Start-Transcript -Path c:\comotorfiles\logs\1_start.log
+Start-Transcript -Path c:\comotorfiles\logs\0_start.log
 
 #set execution policy
 Set-ExecutionPolicy -ExecutionPolicy unrestricted -Force
@@ -101,7 +101,6 @@ $psParameterString =    ' -azureStorageKey ' + $azureStorageKey + `
                         ' -navUserPassword ' + $navUserPassword + `
                         ' -publicMachineName ' + $publicMachineName 
 
-
 try {
     #create TFS credentials
     [Environment]::NewLine
@@ -113,7 +112,7 @@ try {
     [Environment]::NewLine
     $outputString = '##### Defining TFS URL and Files #####'
     $tfsURL = 'https://tfs.tegos.eu/tfs/Tools/PowerShell/_api/_versioncontrol/itemContent?path=%24%2FPowerShell%2FAzureDeployment%2F'
-    $filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'TFS.ps1', 'configure-nav-users.ps1')
+    $filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'TFS.ps1', 'configure-nav-users.ps1', 'initialize-vm.ps1')
 
     Write-Output '##### Start downloading RapidStart-Packages from TFS #####'
     foreach ($file in $filesToDownloadArray) {
@@ -128,11 +127,12 @@ try {
         $outputString = '##### Invoking ' + $filesToDownloadArray[$a] + ' #####'
         Write-Output $outputString
 
-        if( (filesToDownloadArray[$a] -ne 'TFS.ps1') -or ($TFS -eq 'Yes') ) {
-            $invokeCommand = $filesToDownloadArray[$a] + $psParameterString
-            $standardOutputFile = 'C:\comotorfiles\logs\' + $a + '_' + $filesToDownloadArray[$a] + '.log'
-            $standardErrorFile = 'C:\comotorfiles\logs\' + $a + '_' + $filesToDownloadArray[$a] + '-error.txt'
-        
+        if( ($filesToDownloadArray[$a] -ne 'TFS.ps1') -or ($TFS -eq 'Yes') ) {
+            $b = $a + 1
+            $invokeCommand = 'C:\comotorfiles\scripts\' + $filesToDownloadArray[$a] + $psParameterString
+            $standardOutputFile = 'C:\comotorfiles\logs\' + $b + '_' + $filesToDownloadArray[$a] + '.log'
+            $standardErrorFile = 'C:\comotorfiles\logs\' + $b + '_' + $filesToDownloadArray[$a] + '-error.txt'
+            
             Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile 
         }
     }                        
@@ -143,7 +143,7 @@ try {
     $failure = $true
 }
 
-
+#redirect error if failure
 if ($failure) {
     throw "Error deploying the comotor packages"
 }
