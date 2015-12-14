@@ -117,6 +117,14 @@
         "Description": "Select if Auto Create Company should be executed"
       }
     },
+    "docma": {
+      "type": "string",
+      "defaultValue": "No",
+      "allowedValues": [ "Yes", "No" ],
+      "metadata": {
+        "Description": "Select if docma will be available with SharePoint ONline"
+      }
+    },
     "tfsUserName": {
       "type": "string",
       "metadata": {
@@ -439,7 +447,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/start.ps1"
           ],
-          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SQLServerManagementStudio'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword') )]"
+          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SQLServerManagementStudio'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword'), ' -docma ', parameters('docma') )]"
         },
         "protectedSettings": {
           "storageAccountName": "[variables('storageAccountName')]",
