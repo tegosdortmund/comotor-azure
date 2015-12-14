@@ -83,9 +83,15 @@ $outputString = 'tfsUserName = ' + $tfsUserName
 Write-Output $outputString
 
 #define variables
+[Environment]::NewLine
+$outputString = '##### Defining variables #####'
 $country = $country.Substring(0,2)
 $machineName = [Environment]::MachineName.ToLowerInvariant()
 $failure = $false
+#define TFS URL and files
+[Environment]::NewLine   
+$outputString = '##### Defining TFS URL and Files #####'
+$tfsURL = 'https://tfs.tegos.eu/tfs/Tools/PowerShell/_api/_versioncontrol/itemContent?path=%24%2FPowerShell%2FAzureDeployment%2F'
 $filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'configure-nav-users.ps1', 'TFS.ps1', 'docma.ps1', 'initialize-vm.ps1', 'CredMan.ps1')
 
 #generate powershell commmand strings
@@ -111,13 +117,7 @@ try {
     $outputString = '##### Creating TFS credentials #####'
     $secTFSPassword = ConvertTo-SecureString $tfsUserPassword -AsPlainText -Force
     $credTFS = New-Object System.Management.Automation.PSCredential($tfsUserName, $secTFSPassword)
-
-    #define TFS URL and files
-    [Environment]::NewLine
-    $outputString = '##### Defining TFS URL and Files #####'
-    $tfsURL = 'https://tfs.tegos.eu/tfs/Tools/PowerShell/_api/_versioncontrol/itemContent?path=%24%2FPowerShell%2FAzureDeployment%2F'
-    $filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'TFS.ps1', 'configure-nav-users.ps1', 'initialize-vm.ps1')
-
+    
     Write-Output '##### Start downloading RapidStart-Packages from TFS #####'
     foreach ($file in $filesToDownloadArray) {
         $source = $tfsURL + $file
