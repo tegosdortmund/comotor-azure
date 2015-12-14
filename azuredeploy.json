@@ -71,16 +71,6 @@
         "description": "Select the VM size"
       }
     },
-    "navVersion": {
-      "type": "string",
-      "defaultValue": "2016",
-      "allowedValues": [
-        "2016"
-      ],
-      "metadata": {
-        "description": "Select Microsoft Dynamics NAV version"
-      }
-    },
     "country": {
       "type": "string",
       "defaultValue": "W1-International",
@@ -167,6 +157,7 @@
     "locationDynamic": "[resourceGroup().location]",
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
+    "navVersion":  "2016",
 
     "nicName": "[concat(variables('lowerCaseEmployeeCode'), variables('lowerCaseCustomerIdentifier'), 'nic')]",
     "addressPrefix": "10.0.0.0/16",
@@ -410,7 +401,7 @@
           "imageReference": {
             "publisher": "MicrosoftDynamicsNAV",
             "offer": "DynamicsNAV",
-            "sku": "[parameters('navVersion')]",
+            "sku": "[variables('navVersion')]",
             "version": "latest"
           },
           "osDisk": {
@@ -447,7 +438,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/tegosdortmund/comotor-azure/master/start.ps1"
           ],
-          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', parameters('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SQLServerManagementStudio'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword'), ' -docma ', parameters('docma') )]"
+          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File start.ps1', ' -navVersion ', variables('navVersion'), ' -country ', parameters('country'), ' -SSMS ', parameters('SQLServerManagementStudio'), ' -vmAdminUserName ', parameters('vmAdminUserName'), ' -vmAdminPassword ', parameters('vmAdminPassword'), ' -publicMachineName ', reference(variables('domainName')).dnsSettings.fqdn, ' -navUser ', parameters('navUser'), ' -navUserPassword ', parameters('navUserPW'), ' -clickOnce ', parameters('clickOnce'), ' -azureStorageKey ', parameters('azureStorageKey'), ' -TFS ', parameters('rapidStart'), ' -customerName \"', parameters('customerName'), '\" -tfsUserName ', parameters('tfsUserName'), ' -tfsUserPassword ',  parameters('tfsUserPassword'), ' -docma ', parameters('docma') )]"
         },
         "protectedSettings": {
           "storageAccountName": "[variables('storageAccountName')]",
