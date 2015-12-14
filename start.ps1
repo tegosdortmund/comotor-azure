@@ -86,7 +86,7 @@ Write-Output $outputString
 $country = $country.Substring(0,2)
 $machineName = [Environment]::MachineName.ToLowerInvariant()
 $failure = $false
-$filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'configure-nav-users.ps1', 'TFS.ps1', 'docma.ps1', 'initialize-vm.ps1')
+$filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'configure-nav-users.ps1', 'TFS.ps1', 'docma.ps1', 'initialize-vm.ps1', 'CredMan.ps1')
 
 #generate powershell commmand strings
 $psParameterString =    ' -azureStorageKey ' + $azureStorageKey + `
