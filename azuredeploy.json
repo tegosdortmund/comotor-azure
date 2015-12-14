@@ -127,6 +127,18 @@
         "description": "Provide a TFS password"
       }
     },
+    "SharePointUserName": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Provide a TFS password"
+      }
+    },
+    "SharePointUserPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Provide a TFS username"
+      }
+    },
     "navUser": {
       "type": "string",
       "defaultValue": "Felix,Daniel",
