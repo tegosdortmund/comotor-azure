@@ -46,7 +46,7 @@ Param(
     [string]$publicMachineName
 )
 
-#create log folder
+#create folder structure
 New-Item -ItemType Directory -Path C:\comotorfiles -Force
 New-Item -ItemType Directory -Path C:\comotorfiles\scripts -Force
 New-Item -ItemType Directory -Path C:\comotorfiles\logs -Force
