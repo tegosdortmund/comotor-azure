@@ -24,9 +24,6 @@ Param(
     [Parameter(Mandatory=$False)]
     [string]$TFS = 'No',
 
-    [Parameter(Mandatory=$False)]
-    [string]$docma = 'No',
-
     [Parameter(Mandatory=$True)]
     [string]$tfsUserName ,
 
