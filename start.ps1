@@ -92,7 +92,7 @@ $failure = $false
 [Environment]::NewLine   
 $outputString = '##### Defining TFS URL and Files #####'
 $tfsURL = 'https://tfs.tegos.eu/tfs/Tools/PowerShell/_api/_versioncontrol/itemContent?path=%24%2FPowerShell%2FAzureDeployment%2F'
-$filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'TFS.ps1', 'configure-nav-users.ps1', 'docma.ps1', 'initialize-vm.ps1', 'CredMan.ps1')
+$filesToDownloadArray = ('install-prequesites.ps1', 'download-files.ps1', 'initialize-comotor.ps1', 'TFS.ps1', 'configure-nav-users.ps1', 'initialize-vm.ps1')
 
 #generate powershell commmand strings
 $psParameterString =    ' -azureStorageKey ' + $azureStorageKey + `
@@ -131,16 +131,14 @@ try {
         $outputString = '##### Invoking ' + $filesToDownloadArray[$a] + ' #####'
         Write-Output $outputString
 
-        if($filesToDownloadArray[$a] -ne 'CredMan.ps1') {
-            if( ($filesToDownloadArray[$a] -ne 'TFS.ps1') -or ($TFS -eq 'Yes') ) {
-                $b = $a + 1
-                $invokeCommand = 'C:\comotorfiles\scripts\' + $filesToDownloadArray[$a] + $psParameterString
-                $standardOutputFile = 'C:\comotorfiles\logs\' + $b + '_' + $filesToDownloadArray[$a] + '.log'
-                $standardErrorFile = 'C:\comotorfiles\logs\' + $b + '_' + $filesToDownloadArray[$a] + '-error.txt'
+        if( ($filesToDownloadArray[$a] -ne 'TFS.ps1') -or ($TFS -eq 'Yes') ) {
+            $b = $a + 1
+            $invokeCommand = 'C:\comotorfiles\scripts\' + $filesToDownloadArray[$a] + $psParameterString
+            $standardOutputFile = 'C:\comotorfiles\logs\' + $b + '_' + $filesToDownloadArray[$a] + '.log'
+            $standardErrorFile = 'C:\comotorfiles\logs\' + $b + '_' + $filesToDownloadArray[$a] + '-error.txt'
             
-                Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile 
-            }
-        }
+            Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile 
+        }        
     }                        
     
 } catch {
