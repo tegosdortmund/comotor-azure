@@ -11,17 +11,6 @@
     },
     "employeeCode": {
       "type": "string",
-      "allowedValues": [
-        "AO",
-        "HW",
-        "ME",
-        "MF",
-        "MJ",
-        "RK",
-        "SB",
-        "ST",
-        "YELO"
-      ],
       "metadata": {
         "description": "Select a inquirer name"
       }
