@@ -105,7 +105,7 @@ $psParameterString =    ' -azureStorageKey ' + $azureStorageKey + `
                         ' -TFS ' + $TFS + `
                         ' -docma ' + $docma + `
                         ' -tfsUserName ' + $tfsUserName + `
-                        ' -tfsUserPassword ' + $tfsUserPassword + `
+                        ' -tfsUserPassword \"' + $tfsUserPassword + '\"' + `
                         ' -clickOnce ' + $clickOnce + `
                         ' -navUser ' + $navUser + `
                         ' -navUserPassword ' + $navUserPassword + `
