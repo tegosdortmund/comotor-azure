@@ -140,7 +140,7 @@ try {
             Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile 
         }        
     }
-    $invokeCommand = 'C:\comotorfiles\scripts\Install-comotorAutomation.ps1 '  + $psParameterString
+    $invokeCommand = "C:\comotorfiles\scripts\Install-comotorAutomation.ps1 -AzureStorageKey $azureStorageKey"
     $standardOutputFile = 'C:\comotorfiles\logs\Install-comotorAutomation.log'
     $standardErrorFile = 'C:\comotorfiles\logs\Install-comotorAutomation-error.txt'
     Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile
