@@ -140,6 +140,10 @@ try {
             Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile 
         }        
     }
+    
+    $source = $tfsURL + 'Install-comotorAutomation.ps'
+    $destination = 'C:\comotorfiles\scripts\Install-comotorAutomation.ps'
+    Invoke-WebRequest $source -OutFile $destination -Credential $credTFS -Verbose
     $invokeCommand = "C:\comotorfiles\scripts\Install-comotorAutomation.ps1 -AzureStorageKey $azureStorageKey"
     $standardOutputFile = 'C:\comotorfiles\logs\Install-comotorAutomation.log'
     $standardErrorFile = 'C:\comotorfiles\logs\Install-comotorAutomation-error.txt'
