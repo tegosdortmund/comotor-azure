@@ -139,7 +139,11 @@ try {
             
             Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile 
         }        
-    }                        
+    }
+    $invokeCommand = 'C:\comotorfiles\scripts\Install-comotorAutomation.ps1 '  + $psParameterString
+    $standardOutputFile = 'C:\comotorfiles\logs\Install-comotorAutomation.log'
+    $standardErrorFile = 'C:\comotorfiles\logs\Install-comotorAutomation-error.txt'
+    Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile
     
 } catch {
     Set-Content -Path "C:\comotorfiles\logs\0_error.txt" -Value $_.Exception.Message
