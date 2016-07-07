@@ -46,6 +46,18 @@ Param(
     [string]$publicMachineName
 )
 
+New-Item -ItemType Directory -Path C:\comotorfiles -Force
+New-Item -ItemType Directory -Path C:\comotorfiles\scripts -Force
+
+$tfsURL = 'https://tfs.tegos.eu/tfs/Tools/PowerShell/_api/_versioncontrol/itemContent?path=%24%2FPowerShell%2FAzureDeployment%2F'
+
+$secTFSPassword = ConvertTo-SecureString $tfsUserPassword -AsPlainText -Force
+$credTFS = New-Object System.Management.Automation.PSCredential($tfsUserName, $secTFSPassword)
+
+$source = $tfsURL + 'Start-Installation.ps1'
+$destination = 'C:\comotorfiles\scripts\Start-Installation.ps1'
+Invoke-WebRequest $source -OutFile $destination -Credential $credTFS -Verbose
+        
 . 'C:\comotorfiles\scripts\Start-Installation.ps1' `
         -azureStorageKey $azureStorageKey `
         -customerName $customerName `
