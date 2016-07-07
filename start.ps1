@@ -141,10 +141,10 @@ try {
         }        
     }
     
-    $source = $tfsURL + 'Install-comotorAutomation.ps'
-    $destination = 'C:\comotorfiles\scripts\Install-comotorAutomation.ps'
+    $source = $tfsURL + 'Install-comotorAutomation.ps1'
+    $destination = 'C:\comotorfiles\scripts\Install-comotorAutomation.ps1'
     Invoke-WebRequest $source -OutFile $destination -Credential $credTFS -Verbose
-    $invokeCommand = "C:\comotorfiles\scripts\Install-comotorAutomation.ps1 -AzureStorageKey $azureStorageKey"
+    $invokeCommand = "C:\comotorfiles\scripts\Install-comotorAutomation.ps1 -AzureStorageKey $azureStorageKey -TfsCredential $credTFS"
     $standardOutputFile = 'C:\comotorfiles\logs\Install-comotorAutomation.log'
     $standardErrorFile = 'C:\comotorfiles\logs\Install-comotorAutomation-error.txt'
     Start-Process powershell.exe $invokeCommand -Wait -PassThru -RedirectStandardOutput $standardOutputFile -RedirectStandardError $standardErrorFile
